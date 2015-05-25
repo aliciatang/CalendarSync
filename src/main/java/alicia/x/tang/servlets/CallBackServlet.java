@@ -42,8 +42,7 @@ public class CallBackServlet extends HttpServlet {
 		GoogleTokenResponse response = request.execute();
 		String currentUser = currentUserProvider.get(); 
 		flow.createAndStoreCredential(response, currentUser);
-		resp.setContentType("application/json");
-		resp.getWriter().println("{seccuss: true}");
+		resp.sendRedirect(ServletModule.VIEW);
 	}
 
 }

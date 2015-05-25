@@ -14,8 +14,10 @@ mvn appengine:devserver
 ```
 
 # Authorize the app
-localhost:8080/auth
+`http://localhost:8080/auth`
 
 # Go the app
-localhost:8080/index.html
+`http://localhost:8080/index.html`
 
+# Live Demo
+`http://norse-coral-95406.appspot.com/auth`

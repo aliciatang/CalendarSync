@@ -9,7 +9,7 @@ public class ServletModule extends com.google.inject.servlet.ServletModule {
 	public static final String CALENDAR = "/calendar";
 	public static final String CALLBACK = "/oauth2callback";
 	public static final String EVENT = "/event";
-	public static final String VIEW = "view.html";
+	public static final String VIEW = "index.html";
 
 	@Override
 	protected void configureServlets() {
