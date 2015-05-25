@@ -1,7 +1,6 @@
 package alicia.x.tang.servlets;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServlet;
@@ -9,14 +8,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import alicia.x.tang.annotations.CurrentUser;
-import alicia.x.tang.entities.Calendar;
-import alicia.x.tang.entities.User;
 
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeTokenRequest;
 import com.google.api.client.googleapis.auth.oauth2.GoogleTokenResponse;
-import com.google.gson.Gson;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.Singleton;
@@ -34,7 +30,7 @@ public class CallBackServlet extends HttpServlet {
 	@Inject @RequestParameters
 	private Provider<Map<String, String[]>> reqParamsProvider;
 	@Inject @CurrentUser
-	private Provider<User> currentUserProvider;
+	private Provider<String> currentUserProvider;
 
 
 	public void doGet(HttpServletRequest req, HttpServletResponse resp)
@@ -44,9 +40,8 @@ public class CallBackServlet extends HttpServlet {
 		GoogleAuthorizationCodeTokenRequest request = flow.newTokenRequest(code);
 		request.setRedirectUri(CALL_BACK_URL);
 		GoogleTokenResponse response = request.execute();
-		User currentUser = currentUserProvider.get(); 
-		Credential creds = flow.createAndStoreCredential(response, currentUser.getIdString());
-		currentUser.setCredential(creds);
+		String currentUser = currentUserProvider.get(); 
+		flow.createAndStoreCredential(response, currentUser);
 		resp.setContentType("application/json");
 		resp.getWriter().println("{seccuss: true}");
 	}

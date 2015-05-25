@@ -9,9 +9,9 @@ import java.util.List;
 import java.util.UUID;
 
 import alicia.x.tang.annotations.CurrentUser;
-import alicia.x.tang.entities.User;
 
 import com.google.api.client.auth.oauth2.Credential;
+import com.google.api.client.extensions.appengine.datastore.AppEngineDataStoreFactory;
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
 import com.google.api.client.googleapis.auth.oauth2.GoogleClientSecrets;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
@@ -48,6 +48,12 @@ public class ServiceModule extends AbstractModule {
 	JsonFactory provideJsonFactory() {
 		return JacksonFactory.getDefaultInstance();
 	}
+	
+	@Provides
+	@Singleton
+	AppEngineDataStoreFactory provideDataStoreFactory() {
+		return AppEngineDataStoreFactory.getDefaultInstance();
+	}
 
 	@Provides
 	@Singleton
@@ -59,26 +65,23 @@ public class ServiceModule extends AbstractModule {
 
 	@Provides
 	@RequestScoped
-	GoogleAuthorizationCodeFlow provideAuthFlow(HttpTransport transport, JsonFactory  jsonFactory, GoogleClientSecrets clientSecrets) {
+	GoogleAuthorizationCodeFlow provideAuthFlow(HttpTransport transport, JsonFactory  jsonFactory, GoogleClientSecrets clientSecrets, AppEngineDataStoreFactory dataStore) throws IOException {
 		return new GoogleAuthorizationCodeFlow.Builder(transport, jsonFactory, clientSecrets, SCOPES)
 		.setAccessType("offline")
+		.setDataStoreFactory(dataStore)
 		.build();
 	}
 
 	@Provides
 	@SessionScoped
 	@CurrentUser
-	User provideUser() {
-		return new User(UUID.randomUUID().getLeastSignificantBits());
+	String provideUser() {
+		return UUID.randomUUID().toString();
 	}
 
 	@Provides
-	Calendar getCalendar(@CurrentUser User user, HttpTransport transport, JsonFactory jsonFactory, GoogleAuthorizationCodeFlow flow) throws IOException {
-		// TODO: load creds from flow instead of session.
-		Credential credential = user.getCredential();
-		if (credential == null) {
-			credential = flow.loadCredential(user.getIdString());
-		}
+	Calendar getCalendar(@CurrentUser String user, HttpTransport transport, JsonFactory jsonFactory, GoogleAuthorizationCodeFlow flow) throws IOException {
+		Credential credential = flow.loadCredential(user);
 		if (credential == null) {
 			throw new IllegalStateException("User have not be autherized yet.");
 		}
