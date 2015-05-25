@@ -23,6 +23,8 @@ import com.google.inject.servlet.RequestParameters;
 public class EventServlet extends HttpServlet {
 	private static final String MIN = "timeMin";
 	private static final String MAX = "timeMax";
+	public static final String CAL = "cal";
+	
 	@Inject
 	private Provider<GcalService> gcalProvider;
 	@Inject
@@ -34,10 +36,17 @@ public class EventServlet extends HttpServlet {
 		GcalService gcal = gcalProvider.get();
 		resp.setContentType("application/json");
 		Map<String, String[]> params = paramsProvider.get();
-		List<Event> events = gcal.getEvents(getMin(params), getMax(params));
+		List<Event> events = gcal.getEvents(getMin(params), getMax(params), getCal(params));
 		Gson gson = new Gson();
 		// TOOD: figure out how to do this with jersey.
 		resp.getWriter().println(gson.toJson(events));
+	}
+	
+	private static String getCal(Map<String, String[]> params) {
+	  if(params.containsKey(CAL) && params.get(CAL).length > 0) {
+		  return params.get(CAL)[0];
+	  }
+	  throw new IllegalArgumentException("No calendar specified");
 	}
 
 	private static long getMin(Map<String, String[]> params){

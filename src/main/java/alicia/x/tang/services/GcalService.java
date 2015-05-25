@@ -1,12 +1,13 @@
 package alicia.x.tang.services;
 
 import java.io.IOException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 import alicia.x.tang.entities.Event;
+import alicia.x.tang.servlets.EventServlet;
+import alicia.x.tang.servlets.ServletModule;
 
 import com.google.api.client.util.DateTime;
 import com.google.api.services.calendar.model.CalendarList;
@@ -25,20 +26,20 @@ public class GcalService {
 		List<alicia.x.tang.entities.Calendar> ret = new ArrayList<>();
 		for(CalendarListEntry item : calendars.getItems()) {
 			alicia.x.tang.entities.Calendar cal = new alicia.x.tang.entities.Calendar();
-			cal.setBackgroundColor(item.getBackgroundColor());
+			cal.setColor(item.getBackgroundColor());
 			cal.setId(item.getId());
 			cal.setName(item.getSummary());
+			cal.setUrl(ServletModule.EVENT + "?" + EventServlet.CAL + "=" + URLEncoder.encode(item.getId(), "UTF-8"));
 			ret.add(cal);
 		}
 		return ret;
 	}
 
-	public List<Event> getEvents(long min, long max) throws IOException {
+	public List<Event> getEvents(long min, long max, String cal) throws IOException {
 		List<Event> events = new ArrayList<>();
-		for(alicia.x.tang.entities.Calendar cal : getCalendars()) {
 			//TODO: find how to do this in batch.
 			Events eventsForCal = service.events()
-					.list(cal.getId())
+					.list(cal)
 					.setTimeMin(new DateTime(min))
 					.setTimeMax(new DateTime(max))
 					.execute();
@@ -49,7 +50,6 @@ public class GcalService {
 				e.setTitle(event.getSummary());
 				e.setDescription(event.getDescription());
 				e.setLocation(event.getLocation());
-				e.setColor(cal.getBackgroundColor());
 				// TODO: verify if these works with timezone.
 				DateTime start = event.getStart().getDate() == null ? event.getStart().getDateTime() : event.getStart().getDate();
 				DateTime end = event.getEnd().getDate() == null ? event.getEnd().getDateTime() : event.getEnd().getDate();
@@ -58,7 +58,6 @@ public class GcalService {
 				e.setAllDay(start.isDateOnly());
 				events.add(e);
 			}
-		}
 		return events;
 	}
 }
