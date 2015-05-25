@@ -1,0 +1,7 @@
+target/
+.classpath
+.project
+.settings/
+eclipse-launch-profiles/
+src/main/webapp/bower_components/
+.DS_Store
