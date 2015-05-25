@@ -22,6 +22,10 @@ $(document).ready(function() {
 			}
 		});
 	}, 'json');
-	$('#calendar').fullCalendar();
+	$('#calendar').fullCalendar({
+		loading: function(bool) {
+			$('#loading').toggle(bool);
+		}
+	});
 });
 

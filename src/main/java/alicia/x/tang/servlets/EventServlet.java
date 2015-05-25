@@ -6,9 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
-import java.util.TimeZone;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -37,7 +35,7 @@ public class EventServlet extends HttpServlet {
 	@Inject
 	@RequestParameters
 	Provider<Map<String, String[]>> paramsProvider;
-    private static final Logger LOGGER = Logger.getLogger("alicia");
+
 	public void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException {
 		GcalService gcal = gcalProvider.get();
@@ -60,7 +58,6 @@ public class EventServlet extends HttpServlet {
 		try {
 			return new DateTime(DF.parse(params.get(MIN)[0]));
 		} catch (Exception e) {
-			LOGGER.log(Level.SEVERE,params.get(MIN)[0]);
 			return getFirstDateOfCurrentMonth();
 		}
 	}
@@ -68,7 +65,6 @@ public class EventServlet extends HttpServlet {
 		try {
 			return new DateTime(DF.parse(params.get(MAX)[0]));
 		} catch (Exception e) {
-			LOGGER.log(Level.SEVERE,params.get(MAX)[0]);
 			return getLastDateOfCurrentMonth();
 		}
 	}
