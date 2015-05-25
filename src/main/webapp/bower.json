@@ -1,0 +1,25 @@
+{
+  "name": "calendarSync",
+  "version": "0.0.0",
+  "authors": [
+    "Alicia Tang <alicia.x.tang@gmail.com>"
+  ],
+  "description": "calendar sync",
+  "keywords": [
+    "calendar"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "~2.1.4",
+    "moment": "~2.10.3",
+    "fullcalendar": "~2.3.1"
+  }
+}

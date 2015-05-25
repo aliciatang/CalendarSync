@@ -1,0 +1,45 @@
+body {
+		margin-top: 40px;
+		text-align: center;
+		font-size: 14px;
+		font-family: "Lucida Grande",Helvetica,Arial,Verdana,sans-serif;
+	}
+		
+	#wrap {
+	  display: flex;
+	  flex-wrap: wrap;
+	  justify-content: center;
+	  align-items: flex-start;
+	}
+		
+	#gcalendar {
+		width: 250px;
+		margin: 15px;
+		padding: 15px;
+		border: 1px solid #ccc;
+		background: #eee;
+		text-align: center;
+		list-style: none;
+	}
+		
+	#gcalendar h4 {
+		font-size: 16px;
+		margin-top: 0;
+		padding-top: 1em;
+	}
+		
+	#gcalendar li {
+		margin: 10px 0;
+		cursor: pointer;
+		padding: 5px;
+	}
+	
+	#gcalendar li.disabled {
+	    outline: 1px solid #aaa;
+	    background: #eee;
+	}
+	
+	#calendar {
+		width: 900px;
+		margin: 15px;
+	}
