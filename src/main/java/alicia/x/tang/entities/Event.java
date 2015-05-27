@@ -5,6 +5,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
 
+import com.google.api.client.util.DateTime;
+import com.google.api.services.calendar.model.EventDateTime;
+
 /**
  * Event object map fullcalendar event.
  * @see http://fullcalendar.io/docs/event_data/Event_Object/
@@ -30,6 +33,9 @@ public class Event {
 	public void setId(String id) {
 		this.id = id;
 	}
+	public String getTitle() {
+		return title;
+	}
 	public void setTitle(String title) {
 		this.title = title;
 	}
@@ -39,8 +45,14 @@ public class Event {
 	public void setStart(long start) {
 		this.start = DF.format(new Date(start));
 	}
+	public String getStart() {
+		return start;
+	}
 	public void setEnd(long end) {
 		this.end = DF.format(new Date(end));
+	}
+	public String getEnd() {
+		return end;
 	}
 	public void setAllDay(boolean isAllDay) {
 		this.allDay = isAllDay;
@@ -48,7 +60,37 @@ public class Event {
 	public void setDescription(String description) {
 		this.description = description;
 	}
+	public String getDescription() {
+		return description;
+	}
 	public void setLocation(String location) {
 		this.location = location;
+	}
+	public String getLocation() {
+		return location;
+	}
+	public com.google.api.services.calendar.model.Event toGoogleCalendarEvent() {
+		com.google.api.services.calendar.model.Event event = new com.google.api.services.calendar.model.Event();
+		event.setStart(new EventDateTime().setDateTime(new DateTime(this.getStart())));
+		event.setStart(new EventDateTime().setDateTime(new DateTime(this.getEnd())));
+		event.setSummary(this.getTitle());
+		event.setDescription(this.getDescription());
+		event.setLocation(this.getLocation());
+		return event;
+	}
+	public static Event fromGoogleEvent(com.google.api.services.calendar.model.Event gEvent) {
+		Event event = new Event();
+		// TODO: handle recurring events.
+		event.setId(gEvent.getId());
+		event.setTitle(gEvent.getSummary());
+		event.setDescription(gEvent.getDescription());
+		event.setLocation(gEvent.getLocation());
+		// TODO: verify if these works with timezone.
+		DateTime start = gEvent.getStart().getDate() == null ? gEvent.getStart().getDateTime() : gEvent.getStart().getDate();
+		DateTime end = gEvent.getEnd().getDate() == null ? gEvent.getEnd().getDateTime() : gEvent.getEnd().getDate();
+		event.setStart(start.getValue());
+		event.setEnd(end.getValue());
+		event.setAllDay(start.isDateOnly());
+		return event;
 	}
 }

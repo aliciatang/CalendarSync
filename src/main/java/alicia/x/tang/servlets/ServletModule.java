@@ -20,6 +20,6 @@ public class ServletModule extends com.google.inject.servlet.ServletModule {
 		serve(AUTH).with(AuthServlet.class);
 		serve(CALLBACK).with(CallBackServlet.class);
 		serve(CALENDAR).with(CalendarServlet.class);
-		serve(EVENT).with(EventServlet.class);
+		//serve(EVENT).with(EventServlet.class);
 	}
 }

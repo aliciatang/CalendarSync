@@ -31,7 +31,7 @@ public class ServiceModule extends AbstractModule {
 	private static final String APPLICATION_NAME = "CalendarSync";
 	private static final String CLIENT_SECRETS = "/client_secret.json";
 	private static final List<String> SCOPES =
-			Arrays.asList(CalendarScopes.CALENDAR_READONLY);
+			Arrays.asList(CalendarScopes.CALENDAR);
 	@Override
 	protected void configure() {
 		// TODO Auto-generated method stub

@@ -12,6 +12,7 @@ import alicia.x.tang.servlets.ServletModule;
 import com.google.api.client.util.DateTime;
 import com.google.api.services.calendar.model.CalendarList;
 import com.google.api.services.calendar.model.CalendarListEntry;
+import com.google.api.services.calendar.model.EventDateTime;
 import com.google.api.services.calendar.model.Events;
 
 public class GcalService {
@@ -29,7 +30,8 @@ public class GcalService {
 			cal.setColor(item.getBackgroundColor());
 			cal.setId(item.getId());
 			cal.setName(item.getSummary());
-			cal.setUrl(ServletModule.EVENT + "?" + EventServlet.CAL + "=" + URLEncoder.encode(item.getId(), "UTF-8"));
+			cal.setUrl(ServletModule.EVENT + "?" 
+					+ EventServlet.CAL + "=" + URLEncoder.encode(item.getId(), "UTF-8"));
 			ret.add(cal);
 		}
 		return ret;
@@ -44,20 +46,15 @@ public class GcalService {
 				.setTimeMax(max)
 				.execute();
 		for(com.google.api.services.calendar.model.Event event : eventsForCal.getItems()){
-			Event e = new Event();
-			// TODO: handle recurring events.
-			e.setId(event.getId());
-			e.setTitle(event.getSummary());
-			e.setDescription(event.getDescription());
-			e.setLocation(event.getLocation());
-			// TODO: verify if these works with timezone.
-			DateTime start = event.getStart().getDate() == null ? event.getStart().getDateTime() : event.getStart().getDate();
-			DateTime end = event.getEnd().getDate() == null ? event.getEnd().getDateTime() : event.getEnd().getDate();
-			e.setStart(start.getValue());
-			e.setEnd(end.getValue());
-			e.setAllDay(start.isDateOnly());
-			events.add(e);
+			events.add(Event.fromGoogleEvent(event));
 		}
 		return events;
+	}
+	
+	public Event createEvent(Event event, String cal) throws IOException {
+		com.google.api.services.calendar.model.Event createdEvent =
+				service.events().insert(cal, event.toGoogleCalendarEvent()).execute();
+		event.setId(createdEvent.getId());
+		return event;
 	}
 }
