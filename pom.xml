@@ -15,6 +15,10 @@
 		<gcloud.plugin.version>1.9.17a</gcloud.plugin.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<appengine.app.version>1</appengine.app.version>
+		<appengine.version>1.9.21</appengine.version>
+		<jersey.version>2.17</jersey.version>
+		<jackson.version>1.9.6</jackson.version>
+		<guice.version>4.0</guice.version>
 	</properties>
 
 	<prerequisites>
@@ -26,17 +30,17 @@
 		<dependency>
 			<groupId>com.google.appengine</groupId>
 			<artifactId>appengine-api-1.0-sdk</artifactId>
-			<version>1.9.21</version>
+			<version>${appengine.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.google.inject</groupId>
 			<artifactId>guice</artifactId>
-			<version>4.0</version>
+			<version>${guice.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.google.inject.extensions</groupId>
 			<artifactId>guice-servlet</artifactId>
-			<version>4.0</version>
+			<version>${guice.version}</version>
 		</dependency>
 
 		<dependency>
@@ -53,12 +57,12 @@
 		<dependency>
 			<groupId>org.glassfish.jersey.core</groupId>
 			<artifactId>jersey-server</artifactId>
-			<version>2.17</version>
+			<version>${jersey.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.glassfish.jersey.containers</groupId>
-			<artifactId>jersey-container-servlet-core</artifactId>
-			<version>2.17</version>
+			<artifactId>jersey-container-servlet</artifactId>
+			<version>${jersey.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.glassfish.hk2</groupId>
@@ -74,7 +78,7 @@
 			<groupId>org.glassfish.jersey.media</groupId>
 			<artifactId>jersey-media-json-jackson</artifactId>
 			<scope>runtime</scope>
-			<version>2.17</version>
+			<version>${jersey.version}</version>
 		</dependency>
 
 		<!-- Test Dependencies -->
@@ -166,7 +170,7 @@
 			<plugin>
 				<groupId>com.google.appengine</groupId>
 				<artifactId>appengine-maven-plugin</artifactId>
-				<version>1.9.21</version>
+				<version>${appengine.version}</version>
 				<configuration>
 					<enableJarClasses>false</enableJarClasses>
 					<!-- Comment in the below snippet to bind to all IPs instead of just 

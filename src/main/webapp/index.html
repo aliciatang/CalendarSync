@@ -2,22 +2,51 @@
 <head>
 <link rel='stylesheet'
 	href='bower_components/fullcalendar/dist/fullcalendar.min.css' />
+<link rel='stylesheet'
+	href='bower_components/jquery-ui/themes/smoothness/jquery-ui.css' />
+
 <script src='bower_components/jquery/dist/jquery.min.js'></script>
 <script src='bower_components/moment/min/moment.min.js'></script>
 <script src='bower_components/fullcalendar/dist/fullcalendar.min.js'></script>
+<script src='bower_components/jquery-ui/jquery-ui.min.js'></script>
+<script src='bower_components/jquery-serialize-object/dist/jquery.serialize-object.min.js'></script>
 
 <script src='js/calendars.js'></script>
+<script src='js/add-event.js'></script>
 <link rel='stylesheet' href='css/app.css' />
+<link rel='stylesheet' href='css/spinner.css' />
 </head>
 <body>
 	<div id='wrap'>
-		<div>
+		<div class="left">
 			<ul id='gcalendar'>
 				<h4>Google Calendars</h4>
 			</ul>
-			<div id='loading'>loading...</div>
+			<button id="add-event">Add Event</button>
+			<div id='loading' class="spinner">
+				<div class="rect1"></div>
+				<div class="rect2"></div>
+				<div class="rect3"></div>
+				<div class="rect4"></div>
+				<div class="rect5"></div>
+			</div>
 		</div>
 		<div id='calendar'></div>
+	</div>
+	<div id="dialog-form" title="Create new event">
+		<form>
+			<fieldset>
+				<input type="text" name="title" placeholder="event title" value="untitled event" class="text ui-widget-content ui-corner-all" />
+				<!-- TODO: change this to date picker -->
+				<input type="text" name="start" placeholder="start time" value="2015-05-25T12:35:40" class="text ui-widget-content ui-corner-all">
+				<input type="text" name="end" placeholder="end time" value="2015-05-25T18:05:11" class="text ui-widget-content ui-corner-all">
+				<input type="text" name="location" placeholder="enter a location" value="home" class="text ui-widget-content ui-corner-all" />
+				<!-- TODO: change this to a dropdown selection -->
+				<input type="text" name="calendar" placeholder="pick a calendar" value="alicia.x.tang@gmail.com" />
+				<!-- Allow form submission with keyboard without duplicating the dialog button -->
+				<input type="submit" tabindex="-1" style="position: absolute; top: -1000px">
+			</fieldset>
+		</form>
 	</div>
 </body>
 </html>
