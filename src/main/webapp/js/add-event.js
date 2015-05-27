@@ -17,7 +17,8 @@ $(document).ready(function() {
 			dataType:"json",
 			data: JSON.stringify(data),
 			success: function(response){
-				console.log(response);
+				dialog.dialog("close");
+				$('#calendar').fullCalendar('addEvent', response);
 			},
 			
 		});
@@ -29,7 +30,7 @@ $(document).ready(function() {
 		},
 	});
 	$('#add-event').button().click(function(e){
-		dialog.dialog("open")
+		dialog.dialog("open");
 	});
 });
 
