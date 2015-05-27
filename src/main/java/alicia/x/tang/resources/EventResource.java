@@ -10,6 +10,7 @@ import javax.annotation.Nullable;
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -17,6 +18,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
+import alicia.x.tang.entities.Event;
 import alicia.x.tang.services.GcalService;
 
 import com.google.api.client.util.DateTime;
@@ -37,20 +39,14 @@ public class EventResource {
 		return gcal.getEvents(getStart(start), getEnd(end), cal);
 	}
 
-	@PUT
+	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Object create(String contact) {
-		return contact;
+	public Object create(@QueryParam("cal") String cal, Event event) throws IOException {
+		GcalService gcal = gcalProvider.get();
+		return gcal.createEvent(event, cal);
 	}
 
-	@GET
-	@Produces(MediaType.APPLICATION_JSON)
-	@Path("/{id}")
-	public Object json(@PathParam("id") Long id) {
-		return id;
-	}
-	
 	private static DateTime getStart(@Nullable String start) {
 		try {
 			return new DateTime(DF.parse(start));

@@ -1,6 +1,7 @@
 package alicia.x.tang.entities;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
@@ -23,6 +24,7 @@ public class Event {
 	private String start; // iso6801 string
 	private String end; // iso6801 string
 	private boolean allDay = false;
+	private String calendar;
 
 	static {
 		DF = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.S'Z'");
@@ -42,7 +44,8 @@ public class Event {
 	public void setColor(String color) {
 		this.color = color;
 	}
-	public void setStart(long start) {
+	
+	private void setStart(long start) {
 		this.start = DF.format(new Date(start));
 	}
 	public String getStart() {
@@ -69,10 +72,16 @@ public class Event {
 	public String getLocation() {
 		return location;
 	}
+	public void setCalendar(String calendar) {
+		this.calendar= calendar;
+	}
+	public String getCalendar() {
+		return calendar;
+	}
 	public com.google.api.services.calendar.model.Event toGoogleCalendarEvent() {
 		com.google.api.services.calendar.model.Event event = new com.google.api.services.calendar.model.Event();
 		event.setStart(new EventDateTime().setDateTime(new DateTime(this.getStart())));
-		event.setStart(new EventDateTime().setDateTime(new DateTime(this.getEnd())));
+		event.setEnd(new EventDateTime().setDateTime(new DateTime(this.getEnd())));
 		event.setSummary(this.getTitle());
 		event.setDescription(this.getDescription());
 		event.setLocation(this.getLocation());
