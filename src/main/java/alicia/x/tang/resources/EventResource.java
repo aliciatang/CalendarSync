@@ -5,8 +5,6 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.List;
-import java.util.Map;
 
 import javax.annotation.Nullable;
 import javax.inject.Inject;
@@ -19,19 +17,14 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
-import com.google.api.client.util.DateTime;
-import com.google.gson.Gson;
-import com.google.inject.Provider;
-import com.google.inject.servlet.RequestParameters;
-
-import alicia.x.tang.entities.Event;
 import alicia.x.tang.services.GcalService;
+
+import com.google.api.client.util.DateTime;
+import com.google.inject.Provider;
 
 @Path("/event")
 public class EventResource {
 
-	private static final String MIN = "start";
-	private static final String MAX = "end";
 	private static final DateFormat DF = new SimpleDateFormat("yyyy-MM-dd");
 	
 	@Inject
