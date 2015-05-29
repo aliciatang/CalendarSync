@@ -7,9 +7,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import alicia.x.tang.annotations.CallBack;
 import alicia.x.tang.annotations.CurrentUser;
 
-import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeTokenRequest;
 import com.google.api.client.googleapis.auth.oauth2.GoogleTokenResponse;
@@ -21,11 +21,13 @@ import com.google.inject.servlet.RequestParameters;
 @Singleton
 @SuppressWarnings("serial")
 public class CallBackServlet extends HttpServlet {
-	// TODO: make this url works on app engine.
-	private static final String CALL_BACK_URL = ServletModule.BASE_URL + ServletModule.CALLBACK;
+
 	private static final String CODE = "code";
 	@Inject
 	private Provider<GoogleAuthorizationCodeFlow> flowProvider;
+	@Inject
+	@CallBack
+	private String callBackUrl;
 
 	@Inject @RequestParameters
 	private Provider<Map<String, String[]>> reqParamsProvider;
@@ -38,11 +40,10 @@ public class CallBackServlet extends HttpServlet {
 		GoogleAuthorizationCodeFlow flow = flowProvider.get();
 		String code = reqParamsProvider.get().get(CODE)[0];
 		GoogleAuthorizationCodeTokenRequest request = flow.newTokenRequest(code);
-		request.setRedirectUri(CALL_BACK_URL);
+		request.setRedirectUri(callBackUrl);
 		GoogleTokenResponse response = request.execute();
 		String currentUser = currentUserProvider.get(); 
 		flow.createAndStoreCredential(response, currentUser);
 		resp.sendRedirect(ServletModule.VIEW);
 	}
-
 }

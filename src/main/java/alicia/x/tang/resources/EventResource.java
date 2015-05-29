@@ -5,15 +5,15 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.annotation.Nullable;
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
@@ -28,13 +28,14 @@ import com.google.inject.Provider;
 public class EventResource {
 
 	private static final DateFormat DF = new SimpleDateFormat("yyyy-MM-dd");
-	
+	private static final Logger LOGGER = Logger.getLogger(EventResource.class.getName());
+
 	@Inject
 	private Provider<GcalService> gcalProvider;
-	
+
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public Object get(@QueryParam("cal") String cal, @QueryParam("start") String start, @QueryParam("cal") String end ) throws IOException {
+	public Object get(@QueryParam("cal") String cal, @QueryParam("start") String start, @QueryParam("end") String end ) throws IOException {
 		GcalService gcal = gcalProvider.get();
 		return gcal.getEvents(getStart(start), getEnd(end), cal);
 	}
@@ -51,13 +52,15 @@ public class EventResource {
 		try {
 			return new DateTime(DF.parse(start));
 		} catch (Exception e) {
+			LOGGER.log(Level.INFO, "Failed to parse start time:" + start);
 			return getFirstDateOfCurrentMonth();
 		}
 	}
 	private static DateTime getEnd(@Nullable String end) {
 		try {
-			return new DateTime(end);
+			return new DateTime(DF.parse(end));
 		} catch (Exception e) {
+			LOGGER.log(Level.INFO, "Failed to parse end time:" + end);
 			return getLastDateOfCurrentMonth();
 		}
 	}
